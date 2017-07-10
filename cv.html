@@ -1,0 +1,501 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"  "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Nikolay Babanov</title>
+    <script type="application/javascript">
+        function Hash(obj) {
+            this.length = 0;
+            this.items = {};
+            for (var p in obj) {
+                if (obj.hasOwnProperty(p)) {
+                    this.items[p] = obj[p];
+                    ++this.length;
+                }
+            }
+            this.has = function(key) {
+                return this.items.hasOwnProperty(key);
+            }
+            this.at = function(key) {
+                return this.has(key) ? this.items[key] : undefined;
+            }
+        }
+
+        function CalcLastPositionTime() {
+            var yearElem = document.getElementById('lp_year');
+            if (!yearElem) {
+                return;
+            }
+            var now = new Date();
+            var ydif = now.getFullYear() - parseInt(yearElem.innerHTML);
+            var monthPart = '';
+            var monthElem = document.getElementById('lp_month');
+            if (monthElem) {
+                var monthStrToI = new Hash({
+                    Jan: 0,
+                    Feb: 1,
+                    Mar: 2,
+                    Apr: 3,
+                    May: 4,
+                    Jun: 5,
+                    Jul: 6,
+                    Aug: 7,
+                    Sep: 8,
+                    Oct: 9,
+                    Noe: 10,
+                    Dec: 11
+                });
+                var imonth = monthStrToI.at(monthElem.innerHTML);
+                var mdif = now.getMonth() - imonth;
+                if (mdif < 0) {
+                    --ydif;
+                    mdif += 12
+                }
+                // no else, since we might come from the previous if
+                if (mdif > 0) {
+                    monthPart = mdif + ' month';
+                    if (mdif > 1) {
+                        monthPart += 's';
+                    }
+                }
+            }
+            var yearPart = '';
+            if (ydif > 0) {
+                yearPart = ydif + ' year';
+                if (ydif > 1) {
+                    yearPart += 's';
+                }
+            }
+            var timeElem = document.getElementById('lp_time');
+            if (!yearPart && !monthPart) {
+                timeElem.innerHTML = '(less than a month)';
+            } else {
+                var div = ''
+                if (yearPart && monthPart) {
+                    div = ', ';
+                }
+                timeElem.innerHTML = '(' + yearPart + div + monthPart + ')';
+            }
+        }
+
+        function CalcAge() {
+            var now = new Date();
+            var age = now.getFullYear() - 1994;
+            var mdif = now.getMonth() - 0; //0=jan 10=nov
+            if (mdif < 0) {
+                --age;
+            } else if (mdif == 0) {
+                var ddif = now.getDate() - 27;
+                if (ddif < 0) {
+                    --age;
+                }
+            }
+            var el = document.getElementById('age');
+            el.innerHTML = '(' + age + ' years old)';
+        }
+        addEventListener('load', CalcAge, false);
+        addEventListener('load', CalcLastPositionTime, false);
+    </script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <style media="screen" type="text/css">
+        /*reset globals*/
+        html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            outline: 0;
+            font-size: 100%;
+            vertical-align: baseline;
+            background: transparent;
+        }
+
+        body {
+            line-height: 1;
+        }
+
+        ol,ul {
+            list-style: none;
+        }
+
+        blockquote,q {
+            quotes: none;
+        }
+
+        blockquote:before,blockquote:after,q:before,q:after {
+            content: '';
+            content: none;
+        }
+
+        :focus {
+            outline: 0;
+        }
+
+        ins {
+            text-decoration: none;
+        }
+
+        del {
+            text-decoration: line-through;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        /* end reset */
+        body {
+            color: #151510;
+            background: #cdcdcd;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .shadow {
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #b5b5b5;
+            width: 900px;
+            background: #a0a0a7;
+        }
+
+        .main {
+            margin: 2px;
+            background: #fefefe;
+        }
+
+        .content {
+            padding-top: 100px;
+            padding-bottom: 150px;
+            padding-left: 25px;
+            padding-right: 25px;
+        }
+
+        th {
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Open Sans', sans-serif;
+            margin-bottom: .5em;
+            text-transform: uppercase;
+        }
+
+        th:first-letter {
+            font-size: 1.8em;
+            font-weight: 400;
+        }
+
+        .left {
+            width: 25%;
+            text-align: right;
+            padding-right: 12px;
+            padding-top: 6px;
+            border-right: 1px solid #a0a0a0;
+        }
+
+        .right {
+            padding-left: 15px;
+        }
+
+        #age,#lp_month,#lp_year,#lp_time {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+<div class="shadow">
+    <div class="main">
+        <div class="content">
+            <table id="table" width="100%">
+                <tr>
+                    <th class="left"></th>
+                </tr>
+                <tr>
+                    <th class="left">Personal information</th>
+                    <th><!-- image base64 encoded from here: https://www.base64-image.de/ -->
+                        <img alt="me.jpg" src="https://scontent.fsof3-1.fna.fbcdn.net/v/t1.0-1/c388.0.345.345/s160x160/11745317_10204690188676839_624588427417197581_n.jpg?oh=d58408e820a999bbacc19e0b7626dc52&oe=59CB0E60"
+                             style="float:left; margin-left:15px;"></th>
+                </tr>
+                <tr>
+                    <td class="left">Name</td>
+                    <td class="right">Nikolay Ivanov Babanov</td>
+                </tr>
+                <tr>
+                    <td class="left">Address</td>
+                    <td class="right">Sofia, Bulgaria</td>
+                </tr>
+                <tr>
+                    <td class="left">Nationality</td>
+                    <td class="right">Bulgarian</td>
+                </tr>
+                <tr>
+                    <td class="left">Cell</td>
+                    <td class="right">+ 359 884 138 859</td>
+                </tr>
+                <tr>
+                    <td class="left">E-mail</td>
+                    <td class="right">
+                        <a href="mailto:ni.babanov@gmail.com" target="_blank">ni.babanov@gmail.com</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Date of birth</td>
+                    <td class="right">
+                        13.03.1994
+                        <div id="age"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left"></td>
+                    <td class="right"></td>
+                </tr>
+                <tr>
+                    <th class="left">Work experience</th>
+                    <th></th>
+                </tr>
+
+                <tr>
+                    <td class="left"></td>
+                    <td class="right"><hr /></td>
+                </tr>
+                <td class="left">Project</td>
+                <td class="right">Dropshipping platform - web crawler and item management</td>
+                <tr>
+                    <td class="left">Activities and responsibilities</td>
+                    <td class="right">
+                        <ul style="list-style-type:none">
+                            <li>- Negotiation with client</li>
+                            <li>- Architecture design</li>
+                            <li>- Development of web crawler</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Technologies involved</td>
+                    <td class="right">
+                        <ul style="list-style-type:none">
+                            <li>- NodeJS</li>
+                            <li>- SCSS</li>
+                            <li>- HTML5</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left"></td>
+                    <td class="right"><hr /></td>
+                </tr>
+                <td class="left">Company</td>
+                <td class="right"><a href="https://www122.imperiaonline.org/" target="_blank">ImperiaOnline</a></td>
+                <tr>
+                    <td class="left">Period</td>
+                    <td class="right">
+                        <div id="lp_month">August</div>,
+                        <div id="lp_year">
+                            2015
+                        </div>- present
+                        <div id="lp_time"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Position</td>
+                    <td class="right">Software Developer</td>
+                </tr>
+                <tr>
+                    <td class="left"></td>
+                    <td class="right"><hr /></td>
+                </tr>
+                <td class="left">Project</td>
+                <td class="right"><a href="https://credoweb.bg/" target="_blank">Credoweb</a> - Medical social network</td>
+                <tr>
+                    <td class="left">Activities and responsibilities</td>
+                    <td class="right">
+                        <ul style="list-style-type:none">
+                            <li>- Co-lead front-end team of six</li>
+                            <li>- Architecture design</li>
+                            <li>- Components development</li>
+                            <li>- Design slicing</li>
+                            <li>- Communication with client</li>
+                            <li>- Menthorship of juniors</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Technologies involved</td>
+                    <td class="right">
+                        <ul style="list-style-type:none">
+                            <li>- Angular2</li>
+                            <li>- NodeJS</li>
+                            <li>- Server side rendering</li>
+                            <li>- TypeScript</li>
+                            <li>- Webpack</li>
+                            <li>- SCSS</li>
+                            <li>- HTML5</li>
+                            <li>- Git Flow</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left"></td>
+                    <td class="right"><hr /></td>
+                </tr>
+                <td class="left">Project</td>
+                <td class="right">Video player for a popular gaming events organiser</td>
+                <tr>
+                    <td class="left">Activities and responsibilities</td>
+                    <td class="right">
+                        <ul style="list-style-type:none">
+                            <li>- Creation of VOD player</li>
+                            <li>- Creation of Chromecast app, which is commanded by the event app</li>
+                            <li>- Forking and extensive modification of Cordova plugins</li>
+                            <li>- Creation of Cordova hooks</li>
+                            <li>- Implementing designs of the VOD views</li>
+                            <li>- Debugging and speed optimization</li>
+                            <li>- Cross browser and cross platform development</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Technologies involved</td>
+                    <td class="right">
+                        <ul style="list-style-type:none">
+                            <li>- TypeScript</li>
+                            <li>- AngularJS</li>
+                            <li>- Ionic</li>
+                            <li>- Cordova</li>
+                            <li>- Java</li>
+                            <li>- SCSS</li>
+                            <li>- Gulp</li>
+                            <li>- YouTube API</li>
+                            <li>- TwitchTV API</li>
+                            <li>- NodeJS</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left"></td>
+                    <td class="right"><hr /></td>
+                </tr>
+                <tr>
+                    <th class="left">Technical skills</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td class="left">Job-related skills </td>
+                    <td class="right">Disciplined, good communication with people, purposeful and always trying to improve.</td>
+                </tr>
+                <tr>
+                    <td class="left">Programming languages</td>
+                    <td class="right"><hr />JavaScript/TypeScript/NodeJS, C++, C#, Java.</td>
+                </tr>
+                <tr>
+                    <td class="left">Communication skills</td>
+                    <td class="right"><hr />I developed good interpersonal relations and communication skills during my work and studies, the mentorship program I was involved,
+                        clubs and meetings I attended. I can be described as a good team player, who is also capable of working by himself.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Tools</td>
+                    <td class="right"><hr />Base understanding of Visual Studio, Git, Base knowlegde of Unity3D, Base knowlegde of Unreal Engine 4, Good understanding of After Effects / Cinema4D</td>
+                </tr>
+                <tr>
+                    <td class="left">Other</td>
+                    <td class="right"><hr />Knowledge in networking, network programming, game development, graphical programming, programming algorithms, programming concepts, design patterns.
+                        Excellent knowledge in web programming.</td>
+                </tr>
+                <tr>
+                    <th class="left">Languages</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td class="left">Bulgarian</td>
+                    <td class="right">native</td>
+                </tr>
+                <tr>
+                    <td class="left">English</td>
+                    <td class="right">B2/C1</td>
+                </tr>
+                <tr>
+                    <th class="left">Education</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td class="left">2013-2017</td>
+                    <td class="right"><hr />Technical University of Sofia, Faculty of Telecommunications<br>
+                        <b>Audio & Video Engineer</b>
+                        <br />
+                        <ul style="list-style-type:none">
+                            <li>- C basics</li>
+                            <li>- C data structures</li>
+                            <li>- Computer and telephone networking</li>
+                            <li>- Computer vision basics</li>
+                            <li>- Neural networks basics</li>
+                        </ul>
+
+                        <hr />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="left">2008-2013</td>
+                    <td class="right">Highschool of Mathematics and natural sciences, Veliko Tarnovo (PMG)</td>
+                </tr>
+                <tr>
+                    <td class="left">Informatics</td>
+                    <td class="right">
+                        <ul style="list-style-type:none">
+                            <li>- C++ Basics</li>
+                            <li>- C++ Data structures</li>
+                            <li>- C++ OOP</li>
+                            <li>- Algebra</li>
+                            <li>- Geometry</li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th class="left">Other</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td class="left"></td>
+                    <td class="right"><hr /></td>
+                </tr>
+                <tr>
+                    <td class="left">GitHub profile</td>
+                    <td class="right">
+                        <a href="https://github.com/nbabanov" target="_blank">github.com/nbabanov</a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="left">Linkedin profile</td>
+                    <td class="right">
+                        <a href="https://www.linkedin.com/in/babanov/" target="_blank">linkedin.com/in/babanov</a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="left">Stackoverflow profile</td>
+                    <td class="right">
+                        <a href="https://stackoverflow.com/users/5987025/nikolay-babanov" target="_blank">stackoverflow.com/users/5987025/nikolay-babanov</a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="left"></td>
+                    <td class="right">
+                        <br />
+                        Cisco - CCNA Routing and Switching | License: 416023870473JLAM | Sep 2013 – Sep 2016 &#x2192; <a href="http://www.cisco.com/go/verifycertificate?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3Bzo8M7iZ7RMKGYLlz1MCFog%3D%3D" target="_blank">www.cisco.com/go/verifycertificate</a>
+                        <br />
+                        University of Cambridge - First Certificate in English | Licence: 0032141908 | Aug 2011 - Present &#x2192; <a href="https://verification.cambridgeesolonline.org/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3Bzo8M7iZ7RMKGYLlz1MCFog%3D%3D" target="_blank">Verification</a>
+                        <br/>
+                        IT Talents JavaScript Certificate. &#x2192; <a href="http://ittalents.bg/home" target="_blank">ittalents.bg/home</a>
+                        <br/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
